@@ -17,14 +17,14 @@ function addUser($email, $password) : void {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", "root", "");
     $sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
     $statement = $pdo->prepare($sql);
-    $statement->execute(["email" => $email, "password" => $password]);
+    $statement->execute(["email" => $email, "password" => password_hash($password, PASSWORD_DEFAULT)]);
 }
 
 function setFlashMessage($key, $message) {
     $_SESSION[$key] = $message;
 }
 
-function displayFlashMessage($key) {
+function displayFlashMessage($key) : void {
     if(isset($_SESSION[$key])) {
        echo '<div class="alert alert-' . $key .  ' text-dark" role="alert">' . $_SESSION[$key] . '</div>';
     }
@@ -33,4 +33,18 @@ function displayFlashMessage($key) {
 function redirectTo($path) : void {
     header("Location: /" . $path);
     exit();
+}
+
+function login($email, $password) : bool
+{
+    $user = getUserByEmail($email);
+    if(!$user || !password_verify($password, $user['password'])) {
+        setFlashMessage("danger" , "Неверный логин или пароль");
+        redirectTo("page_login.php");
+        return false;
+    }
+    else {
+        redirectTo("users.php");
+        return true;
+    }
 }

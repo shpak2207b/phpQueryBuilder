@@ -38,15 +38,16 @@ require_once "functions.php";
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?= displayFlashMessage("success"); unset($_SESSION['success'])?>
-            <form action="">
+            <?= displayFlashMessage("success"); unset($_SESSION['success']);
+            displayFlashMessage("danger"); unset($_SESSION['danger']); ?>
+            <form action="login.php" method="post">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
-                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="">
+                    <input name="email" type="email" id="username" class="form-control" placeholder="Эл. адрес" value="">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-control" placeholder="" >
+                    <input type="password" name="password" id="password" class="form-control" placeholder="" >
                 </div>
                 <button type="submit" class="btn btn-default float-right">Войти</button>
             </form>
