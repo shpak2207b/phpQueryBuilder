@@ -44,7 +44,32 @@ function login($email, $password) : bool
         return false;
     }
     else {
+        $_SESSION['user'] = getUserByEmail($email);
         redirectTo("users.php");
         return true;
     }
+}
+
+function getCurrentUser()
+{
+    return $_SESSION['user'];
+}
+
+function isAdmin()
+{
+    if (getCurrentUser()['role'] === "admin"){
+        return true;
+    }
+    else return false;
+}
+
+function getAllUsers()
+{
+    $host = "MySQL-8.0";
+    $dbname = "users";
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", "root", "");
+    $sql = "SELECT * FROM users";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
