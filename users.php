@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "functions.php";
+var_dump(getCurrentUser());
 
 if(!getCurrentUser()) {
     redirectTo("page_login.php");
@@ -47,7 +48,10 @@ $users = getAllUsers();
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-<!--            <div class="alert alert-success">-->
+            <?= displayFlashMessage("success") ?>
+            <?= displayFlashMessage("danger") ?>
+
+            <!--            <div class="alert alert-success">-->
 <!--                Профиль успешно обновлен.-->
 <!--            </div>-->
             <div class="subheader">
@@ -58,7 +62,7 @@ $users = getAllUsers();
             <div class="row">
                 <div class="col-xl-12">
                     <?php if (isAdmin()): ?>
-                    <a class="btn btn-success" href="create_user.html">Добавить</a>
+                    <a class="btn btn-success" href="create_user.php">Добавить</a>
                     <?php endif; ?>
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                         <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
@@ -80,27 +84,30 @@ $users = getAllUsers();
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
                                 <span class="status status-warning mr-3">
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url('img/demo/avatars/avatar-c.png'); background-size: cover;"></span>
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url(<?php if (!empty($user['avatar_path'])) {echo 'img/demo/avatars/' .  $user['avatar_path']; }  else {echo 'img/demo/avatars/avatar-f.png';} ?>); background-size: cover;"></span>
                                 </span>
                                 <div class="info-card-text flex-1">
-                                    <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
+                                    <p href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         <?= $user['username'] ?>
                                         <?php if (isAdmin() || $user['id'] === getCurrentUser()['id']): ?>
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                         <?php endif; ?>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="edit.html">
+                                    </p>
+
+                                    <?php if (isAdmin() || $user['id'] === getCurrentUser()['id']): ?>
+                                        <div class="dropdown-menu">
+
+                                        <a  class="dropdown-item" href="edit.php?id=<?= $user['id'] ?>">
                                             <i class="fa fa-edit"></i>
                                             Редактировать</a>
-                                        <a class="dropdown-item" href="security.html">
+                                        <a class="dropdown-item" href="security.php?id=<?= $user['id'] ?>">
                                             <i class="fa fa-lock"></i>
                                             Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.php?id=<?= $user['id'] ?>">
                                             <i class="fa fa-sun"></i>
                                             Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.php?id=<?= $user['id'] ?>">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>
@@ -109,7 +116,10 @@ $users = getAllUsers();
                                             Удалить
                                         </a>
                                     </div>
+                                    <?php endif; ?>
+
                                     <span class="text-truncate text-truncate-xl"><?= $user['job_name'] ?></span>
+
                                 </div>
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_2 > .card-body + .card-body" aria-expanded="false">
                                     <span class="collapsed-hidden">+</span>
@@ -135,6 +145,9 @@ $users = getAllUsers();
                                     <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#E1306C">
                                         <i class="fab fa-instagram"></i>
                                     </a>
+                                    <?php if (isAdmin() || $user['id'] === getCurrentUser()['id']): ?>
+                                    <a href="user.php?id=<?= $user['id'] ?>"><button class="btn btn-default">Страница пользователя</button></a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -533,16 +546,16 @@ $users = getAllUsers();
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="edit.html">
+                                        <a class="dropdown-item" href="edit.php">
                                             <i class="fa fa-edit"></i>
                                         Редактировать</a>
-                                        <a class="dropdown-item" href="security.html">
+                                        <a class="dropdown-item" href="security.php">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.php">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.php">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>

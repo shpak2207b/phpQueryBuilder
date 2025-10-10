@@ -65,7 +65,7 @@ require_once "functions.php";
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <?= displayFlashMessage("danger"); unset($_SESSION['danger']); ?>
+                                    <?= displayFlashMessage("danger"); ?>
                                     <form method="post" id="js-login" novalidate="" action="register.php">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>

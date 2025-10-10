@@ -1,3 +1,18 @@
+<?php
+session_start();
+require_once "functions.php";
+
+$editingUserId = $_GET['id'];
+
+$currentUser = getCurrentUser();
+if(!$currentUser || (!isAdmin() && !isAuthor($currentUser['id'], $editingUserId))) {
+    setFlashMessage("danger", "Вы не можете редактировать чужую карточку");
+    redirectTo("users.php");
+}
+
+$currentStatus = $currentUser['status'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,47 +49,41 @@
     <main id="js-page-content" role="main" class="page-content mt-3">
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-plus-circle'></i> Редактировать
+                <i class='subheader-icon fal fa-sun'></i> Установить статус
             </h1>
 
         </div>
-        <form action="">
+        <?= displayFlashMessage("success") ?>
+
+        <form method="post" action="edit_status.php">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
                             <div class="panel-hdr">
-                                <h2>Общая информация</h2>
+                                <h2>Установка текущего статуса</h2>
                             </div>
                             <div class="panel-content">
-                                <!-- username -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Иван иванов">
-                                </div>
-
-                                <!-- title -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Marlin Веб-разработчик">
-                                </div>
-
-                                <!-- tel -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="8 888 8888 88">
-                                </div>
-
-                                <!-- address -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Восточные Королевства, Штормград">
-                                </div>
-                                <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Редактировать</button>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <!-- status -->
+                                        <div class="form-group">
+                                            <input name="id" type="hidden" id="simpleinput" class="form-control" value="<?= $currentUser['id'] ?>">
+                                            <label class="form-label" for="example-select">Выберите статус</label>
+                                            <select name="status" class="form-control" id="example-select">
+                                                <option value="online" <?= $currentStatus === 'online' ? 'selected' : '' ?>>Онлайн</option>
+                                                <option value="away" <?= $currentStatus === 'away' ? 'selected' : '' ?>>Отошел</option>
+                                                <option value="do_not_disturb" <?= $currentStatus === 'do_not_disturb' ? 'selected' : '' ?>>Не беспокоить</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                                        <button class="btn btn-warning">Set Status</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

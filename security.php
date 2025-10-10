@@ -1,3 +1,17 @@
+<?php
+session_start();
+require_once "functions.php";
+
+$editingUserId = $_GET['id'];
+
+$currentUser = getCurrentUser();
+if(!$currentUser || (!isAdmin() && !isAuthor($currentUser['id'], $editingUserId))) {
+    setFlashMessage("danger", "Вы не можете редактировать чужую карточку");
+    redirectTo("users.php");
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,9 +50,9 @@
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-lock'></i> Безопасность
             </h1>
-
+        <?= displayFlashMessage("danger"); ?>
         </div>
-        <form action="">
+        <form method="post" action="edit_credentials.php">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -47,23 +61,27 @@
                                 <h2>Обновление эл. адреса и пароля</h2>
                             </div>
                             <div class="panel-content">
+                                <!-- id -->
+                                <div class="form-group">
+                                    <input name="id" type="hidden" id="simpleinput" class="form-control" value="<?= $currentUser['id'] ?>">
+                                </div>
                                 <!-- email -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="john@example.com">
+                                    <input name="email" type="text" id="simpleinput" class="form-control" value="<?= $currentUser['email'] ?>">
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input name="password" type="password" id="simpleinput" class="form-control">
                                 </div>
 
                                 <!-- password confirmation-->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                    <input type="password" id="simpleinput" class="form-control">
-                                </div>
+<!--                                <div class="form-group">-->
+<!--                                    <label class="form-label" for="simpleinput">Подтверждение пароля</label>-->
+<!--                                    <input name="password" type="password" id="simpleinput" class="form-control">-->
+<!--                                </div>-->
 
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">

@@ -1,3 +1,20 @@
+<?php
+session_start();
+require_once "functions.php";
+
+$editingUserId = $_GET['id'];
+
+$currentUser = getCurrentUser();
+if(!$currentUser || (!isAdmin() && !isAuthor($currentUser['id'], $editingUserId))) {
+    setFlashMessage("danger", "Вы не можете редактировать чужую карточку");
+    redirectTo("users.php");
+}
+
+$editingUser = getUserById($editingUserId);
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,38 +51,52 @@
     <main id="js-page-content" role="main" class="page-content mt-3">
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-sun'></i> Установить статус
+                <i class='subheader-icon fal fa-plus-circle'></i> Редактировать
             </h1>
 
         </div>
-        <form action="">
+        <form method="post" action="edit_base_info.php">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
                             <div class="panel-hdr">
-                                <h2>Установка текущего статуса</h2>
+                                <h2>Общая информация</h2>
                             </div>
                             <div class="panel-content">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <!-- status -->
-                                        <div class="form-group">
-                                            <label class="form-label" for="example-select">Выберите статус</label>
-                                            <select class="form-control" id="example-select">
-                                                <option>Онлайн</option>
-                                                <option>Отошел</option>
-                                                <option>Не беспокоить</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning">Set Status</button>
-                                    </div>
+                                <!-- id -->
+                                <div class="form-group">
+                                    <input name="id" type="hidden" id="simpleinput" class="form-control" value="<?= $editingUserId ?>">
+                                </div>
+
+                                <!-- username -->
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Имя</label>
+                                    <input name="username" type="text" id="simpleinput" class="form-control" value="<?= $editingUser['username'] ?>">
+                                </div>
+
+                                <!-- title -->
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Место работы</label>
+                                    <input name="job_name" type="text" id="simpleinput" class="form-control" value="<?= $editingUser['job_name'] ?>">
+                                </div>
+
+                                <!-- tel -->
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Номер телефона</label>
+                                    <input name="phone" type="text" id="simpleinput" class="form-control" value="<?= $editingUser['phone'] ?>">
+                                </div>
+
+                                <!-- address -->
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Адрес</label>
+                                    <input name="address" type="text" id="simpleinput" class="form-control" value="<?= $editingUser['address'] ?>">
+                                </div>
+                                <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                                    <button type="submit" class="btn btn-warning">Редактировать</button>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

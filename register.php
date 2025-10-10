@@ -11,8 +11,8 @@ if (getUserByEmail($email)) {
     setFlashMessage("danger", "Пользователь с таким email уже существует");
     redirectTo("page_register.php");
 }
-else{
-    addUser($email, $password);
-    setFlashMessage("success", "Пользователь успешно зарегистрирован");
-    redirectTo("page_login.php");
-}
+
+addUser($email, $password);
+setFlashMessage("success", "Пользователь успешно зарегистрирован");
+redirectTo("page_login.php");
+

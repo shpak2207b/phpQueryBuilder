@@ -1,3 +1,19 @@
+<?php
+session_start();
+require_once "functions.php";
+
+$editingUserId = $_GET['id'];
+
+$currentUser = getCurrentUser();
+if(!$currentUser || (!isAdmin() && !isAuthor($currentUser['id'], $editingUserId))) {
+    setFlashMessage("danger", "Вы не можете редактировать чужую карточку");
+    redirectTo("users.php");
+}
+
+$currentAvatar = getUserById($editingUserId)['avatar_path'];
+var_dump($currentAvatar);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,22 +54,31 @@
             </h1>
 
         </div>
-        <form action="">
+        <form method="post" action="edit_avatar.php" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
+                            <input name="id" type="hidden" id="simpleinput" class="form-control" value="<?= $editingUserId ?>">
+
                             <div class="panel-hdr">
                                 <h2>Текущий аватар</h2>
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="img/demo/authors/josh.png" alt="" class="img-responsive" width="200">
+                                    <img src="<?php
+                                    if (!empty($currentAvatar)) {
+                                        echo 'img/demo/avatars/' . $currentAvatar . '?v=' . time();
+                                    } else {
+                                        echo 'img/demo/avatars/avatar-f.png';
+                                    }
+                                    ?>" alt="" class="img-responsive" width="200">
+
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input name="avatar" type="file" id="example-fileinput" class="form-control-file">
                                 </div>
 
 
