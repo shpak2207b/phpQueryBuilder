@@ -10,7 +10,10 @@ if(!$currentUser || (!isAdmin() && !isAuthor($currentUser['id'], $editingUserId)
     redirectTo("users.php");
 }
 
-$currentStatus = $currentUser['status'];
+$editingUser = getUserById($editingUserId); // нужно реализовать, если нет
+
+
+$currentStatus = $editingUser['status'];
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +71,7 @@ $currentStatus = $currentUser['status'];
                                     <div class="col-md-4">
                                         <!-- status -->
                                         <div class="form-group">
-                                            <input name="id" type="hidden" id="simpleinput" class="form-control" value="<?= $currentUser['id'] ?>">
+                                            <input name="id" type="hidden" id="simpleinput" class="form-control" value="<?= $editingUserId ?>">
                                             <label class="form-label" for="example-select">Выберите статус</label>
                                             <select name="status" class="form-control" id="example-select">
                                                 <option value="online" <?= $currentStatus === 'online' ? 'selected' : '' ?>>Онлайн</option>

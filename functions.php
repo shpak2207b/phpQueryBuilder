@@ -50,6 +50,14 @@ function edit($id, $username, $job_name, $phone, $address) : void
     ]);
 }
 
+function deleteUser ($id)
+{
+    $pdo = connectDB();
+    $sql = "DELETE FROM users WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+}
+
 function editCredentials($userId, $email, $password)
 {
     $pdo = connectDB();
@@ -141,6 +149,19 @@ function getAllUsers()
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getStatus($status) : string
+{
+ switch ($status) {
+     case "online":
+         return "success";
+     case "away":
+         return "warning";
+     case "do_not_disturb":
+         return "danger";
+     default:
+         return "offline";
+ }
+}
 //ВЗАИМОДЕЙСТВИЕ С СЕССИЕЙ
 
 

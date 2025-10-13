@@ -11,7 +11,6 @@ if(!$currentUser || (!isAdmin() && !isAuthor($currentUser['id'], $editingUserId)
 }
 
 $currentAvatar = getUserById($editingUserId)['avatar_path'];
-var_dump($currentAvatar);
 ?>
 
 <!DOCTYPE html>
