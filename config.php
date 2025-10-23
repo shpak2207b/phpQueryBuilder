@@ -2,10 +2,10 @@
 
 return [
     "database" => [
-        "database" => "app2",
-        "username" => "root",
-        "password" => "",
-        "connection" => "mysql:host=MySQL-8.0",
+        "database" => "app_db",
+        "username" => "admin",
+        "password" => "admin",
+        "connection" => "mysql:host=mysql",
         "charset" => "utf8"
     ]
 ];

@@ -2,8 +2,8 @@
 include __DIR__ . "/../functions.php";
 
 $routes = [
-    "/home" => __DIR__ . '/../homepage.php',
-    "/about" => __DIR__ . '/../about.php'
+    "/" => 'homepage.php',
+    "/about" =>  'about.php'
 ];
 $route = $_SERVER['REQUEST_URI'];
 if(array_key_exists($route, $routes)) {
