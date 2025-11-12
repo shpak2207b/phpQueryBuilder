@@ -4,14 +4,15 @@ use Aura\SqlQuery\Mysql\Delete;
 use Aura\SqlQuery\QueryFactory;
 use PDO;
 
+
 class QueryBuilder
 {
     private $pdo;
     private $queryFactory;
 
-    public function __construct()
+    public function __construct(\PDO $pdo)
     {
-        $this->pdo = new PDO("mysql:host=MySQL-8.0;dbname=app2;", "root", "");
+        $this->pdo = $pdo;
         $this->queryFactory = new QueryFactory('mysql');
     }
 
